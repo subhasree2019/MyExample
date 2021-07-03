@@ -1,0 +1,237 @@
+
+'''
+Here I have created a class to add details of student and faculty 
+'''
+f_lis = []
+lis = []
+
+
+# global variables to store faculty and student names
+
+class Person:
+    def addStudent(self, name):
+        lis.append(name)
+
+    def displayStudent(self):
+        return lis
+
+    def displayFaculty(self):
+        return f_lis
+
+    def addFaculty(self, name):
+        f_lis.append(name)
+
+
+while True:
+    print("select the person 1. faculty 2.student 3.exit")
+    n = int(input())
+    if n is 1:
+        inp = input("enter 'add' or 'display' details")
+        if inp == 'add':
+            std = Person()
+            nam = input("enter faculty name")
+            std.addFaculty(nam)
+            print("added")
+        elif inp == 'display':
+            print(std.displayFaculty())
+        else:
+            print("enter correct choice ")
+    elif n is 2:
+        inp = input("enter 'add' or 'display' details")
+        if inp == 'add':
+            std = Person()
+            std.addStudent(input())
+        elif inp == 'display':
+            print(std.displayStudent())
+        else:
+            print("enter correct choice ")
+    else:
+        print("exited")
+        break
+
+"""
+The above code works successfully but it violates first and second SOLID principle SINGLE RESPONSIBILITY 
+so I have created separate classes for student and faculty i.e., giving single responsibility to student and faculty from person
+so now this program is open for extension but closed for modification, so if we want to add management details we can use interface to extend
+"""
+
+
+f_lis = []
+lis = []
+
+
+class Student:
+    def addStudent(self, name):
+        lis.append(name)
+
+    def display(self):
+        return lis
+
+
+class Faculty(Student):
+    def addFaculty(self, name):
+        print("haiii")
+        f_lis.append(name)
+
+    def display(self):
+        return f_lis
+
+hile True:
+    print("select the person 1. faculty 2.student 3.exit")
+    n = int(input())
+    if n is 1:
+        inp = input("enter 'add' or 'display' details")
+        if inp == 'add':
+            std = Faculty()
+            nam = input("enter faculty name")
+            std.addFaculty(nam)
+            print("added")
+        elif inp == 'display':
+            print(std.display())
+        else:
+            print("enter correct choice ")
+    elif n is 2:
+        inp = input("enter 'add' or 'display' details")
+        if inp == 'add':
+            std = Student()
+            std.addStudent(input())
+        elif inp == 'display':
+            print(std.display())
+        else:
+            print("enter correct choice ")
+    else:
+        print("exited")
+        break
+
+"""
+The above code works successfully but it violates third SOLID principle LSP 
+that when faculty inherits student, in display it may show student name instead of faculty because display() is overridden 
+so I have created abstract class in which faculty and student will implement its behaviour"""
+
+from abc import ABC, abstractmethod
+
+f_lis = []
+lis = []
+
+
+class Person(ABC):
+    @abstractmethod
+    def add(self, name):
+        pass
+
+    @abstractmethod
+    def display(self, name):
+        pass
+
+
+class Student(Person):
+    def add(self, name):
+        lis.append(name)
+
+    def display(self):
+        return lis
+
+
+class Faculty(Person):
+    def add(self, name):
+        print("haiii")
+        f_lis.append(name)
+
+    def display(self):
+        return f_lis
+
+
+
+while True:
+    print("select the person 1. faculty 2.student 3.exit")
+    n = int(input())
+    if n is 1:
+        inp = input("enter 'add' or 'display' details")
+        if inp == 'add':
+            std = Faculty()
+            nam = input("enter faculty name")
+            std.add(nam)
+            print("added")
+        elif inp == 'display':
+            print(std.display())
+        else:
+            print("enter correct choice ")
+    elif n is 2:
+        inp = input("enter 'add' or 'display' details")
+        if inp == 'add':
+            std = Student()
+            std.add(input())
+        elif inp == 'display':
+            print(std.display())
+        else:
+            print("enter correct choice ")
+    else:
+        print("exited")
+        break
+"""
+The above code works successfully but it violates fourth SOLID principle ISP
+If i want to add subject taught for faculty class and grade for student class then add method will have no usage as parameters are different 
+so I used only display in interface and remaining functionalities in in their own classes to ensure ISP
+and last principle DIP also implemented maintaining less dependency on abstract class , which i have removed add method in abstract class
+
+"""
+from abc import ABC, abstractmethod
+
+f_lis = {}
+lis = {}
+
+
+class Person(ABC):
+
+    @abstractmethod
+    def display(self, name):
+        pass
+
+
+class Student(Person):
+    def add(self,name,grade):
+        lis[name]=grade #undating dictionary
+
+    def display(self):
+        return lis
+
+
+class Faculty(Person):
+    def add(self,name, grade):
+        f_lis[name] = grade
+        print(f_lis)
+
+    def display(self):
+        return f_lis
+
+
+while True:
+    print("select the person 1. faculty 2.student 3.exit")
+    n = int(input())
+    if n is 1:
+        inp = input("enter 'add' or 'display' details")
+        if inp == 'add':
+            std = Faculty()
+            nam = input("enter faculty name")
+            sub= input("enter subject taught")
+            std.add(nam,sub)
+            print("added")
+        elif inp == 'display':
+            print(std.display())
+        else:
+            print("enter correct choice ")
+    elif n is 2:
+        inp = input("enter 'add' or 'display' details")
+        if inp == 'add':
+            std = Student()
+            nam = input("enter student name")
+            grd = input("enter grade")
+            std.add(nam, grd)
+            print("added")
+        elif inp == 'display':
+            print(std.display())
+        else:
+            print("enter correct choice ")
+    else:
+        print("exited")
+        break
