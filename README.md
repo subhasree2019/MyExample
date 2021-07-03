@@ -1,0 +1,2 @@
+# MyExample
+Illustrated SOLID principles
